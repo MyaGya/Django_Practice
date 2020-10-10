@@ -1,0 +1,18 @@
+<h1>{{ question.question_text</h1>      <!-- 질문을 제목으로 사용하기 위해 폰트를 h1으로 설정 -->
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %} <!-- 에러 처리, -->
+
+<form action="{% url 'polls:vote' question,.id %}" method="post"> <!-- 서버에 반영되는 무언가를 할 경우 보통 post를 사용하는게 편합니다
+polls:vote로 보내며 URL에 대한 이름 공간은 polls/urls.py 파일의 app_name 에 정의되어 있습니다.
+최종적으로 받는 곳은 /polls/7/vote/형식이 됩니다 -->
+    {% csrf_token %}  <!-- 폼 처리의 경우 기본적으로 csrf 공격을 방지하기 위한 기능을 제공합니다 -->
+    {% for choice in question.choice_set.all %}  <!-- for태그로 view 함수에서 넘겨준 객체를 순회하며 detail() 뷰 함수에서도
+    Question 객체를 템플릿으로 넘겨받습니다. question.choice_set.all 은 Question 객체의 choice_set 속성 항목 모두를 뜻합니다 -->
+        <input type="radio" name="choice" id="choice{{ forloop.counter}}" value="{{choice.id}}" /> <!-- radio 버튼 항목으로 선택합니다.
+        전송은 'choice'='3'(choice.id) 형태로 구성되도록 name과 value 속성을 정의합니다 -->
+    <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br />
+        <!--forloop.counter는 for루프를 실행한 횟수를 담고 있고, <lable for> 속성과 <input id> 속성이 같아야 바인딩됩니다. -->
+    {% endfor %>
+    <input type="submit" value="Vote" /> <!-- Vote 버튼을 클릭하면 사용자가 선택한 폼 데이터가 POST방식으로 완전히 전송됩니다.
+    전송된 데이터는 vote() 뷰 함수에서 request.POST['choice'] 구문으로 액세스 할 수 있습니다
+    <input> 태그의 name과 value 속성값들이 request.POST 사전에 key, value로 사용된다는 점을 유의해야합니다. -->
+</form>
