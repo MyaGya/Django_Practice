@@ -47,15 +47,21 @@ def vote(request, question_id):  # 뷰 함수 정의 question_id는 urls에서 �
         # exception이 발생하면 render() 함수에 의해서 question과 error_message 컨텍스트 변수를
         # detail.html 템플릿으로 전달합니다. 그 결과 사용자에게는 에러 메세지와 질문 항목을 다시 보여줍니다.
 
-    else: # 예외가 발생하지 않고 정상적으로 처리 된 경우
-        selected_choice.votes += 1 # 선택값 1 추가
-        selected_choice.save() # 변경사항 저장
+    else:  # 예외가 발생하지 않고 정상적으로 처리 된 경우
+        selected_choice.votes += 1  # 선택값 1 추가
+        selected_choice.save()  # 변경사항 저장
         # POST 데이터를 정상적으로 처리하였으면,
         # 항상 HttpResponseRedirect를 반환하여 리다이렉션 처리합니다.
         return HttpResponseRedirect(reverse('polls:results', args=(question_id,)))
         # view함수가 반환하는 객체는 HttpResponse가 아니라 HttpResponseReirect입니다.
         # HttpResponseRedirect 객체의 생성자는 리다이렉트할 타겟 URL을 인자로 받습니다. 타겟은 reverse()함수로 만듭니다.
-        
+
         # 최종적으로 vote()뷰 함수는 리다이렉트할 URL을 담은 HttpResponseRedirect 객체를 반환합니다.
         # 이처럼 웹 프로그램에서 POST 방식의 폼 데이터를 처리하는 경우, 그 결과를 보여줄 수 있는 페이지로 이동시키기 위해
         # HttpResponseRedirect 객체를 리턴하는 것이 일반적입니다
+
+
+def result(request, question_id):  #받는 객체는 다음과 같습니다 path('polls/<int:question_id>/results/', views.results, name='results')
+    question = get_object_or_404(Question, pk=question_id)
+    return render(request, 'polls/result.html', {'question': question})
+    # 최종적으로 results.html템플릿 코드를 렌더링한 결과인 HTML 텍스트 데이터를 담은 HttpResponse 객체를 반환합니다.
