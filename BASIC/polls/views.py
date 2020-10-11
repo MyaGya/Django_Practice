@@ -19,8 +19,7 @@ def detail(request, question_id):  # 뷰 함수를 정의하여 reqeust 필수 �
     # 이전의 URL 패턴에서 정규식으로 추출한 question_id 파라미터가 뷰 함수의 인자로 넘어옵니다.
     question = get_object_or_404(Question, pk=question_id)  # 단축함수 get_object_or_404입니다.
     # Question 모델 클래스로부터 pk가question_id로 입력받은 값과 비교합니다. 조건에 맞는 객체가 없으면 404에러를 발생합니다.
-    context = {'question': question}
-    return render(request, 'polls/detail.html', context)
+    return render(request, 'polls/detail.html', {'question': question})
     # polls/detail.html에 컨텍스트 변수를 추가하여 HTML텍스트를 만들고 HttpResponse객체를 반환합니다.
     # 템플릿에게 넘겨주는 컨텍스트 사전을 render() 함수의 인자로 직접 써주고 있으며, 템플릿에서는 question이란 변수를 사용 할 수 있게 되었습니다.
     # detail() 뷰 함수는 최종적으로 detail.html의 텍스트 데이터를 담은 HttpResponse 객체를 반환합니다.
@@ -61,7 +60,7 @@ def vote(request, question_id):  # 뷰 함수 정의 question_id는 urls에서 �
         # HttpResponseRedirect 객체를 리턴하는 것이 일반적입니다
 
 
-def result(request, question_id):  #받는 객체는 다음과 같습니다 path('polls/<int:question_id>/results/', views.results, name='results')
+def results(request, question_id):  #받는 객체는 다음과 같습니다 path('polls/<int:question_id>/results/', views.results, name='results')
     question = get_object_or_404(Question, pk=question_id)
-    return render(request, 'polls/result.html', {'question': question})
+    return render(request, 'polls/results.html', {'question': question})
     # 최종적으로 results.html템플릿 코드를 렌더링한 결과인 HTML 텍스트 데이터를 담은 HttpResponse 객체를 반환합니다.
