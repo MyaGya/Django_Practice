@@ -1,0 +1,9 @@
+<h1>{{ question.question_text }}</h1>
+
+<ul>
+    {% for choice in question.choice_set.all %} <!-- choice 객체 모두를 순회 -->
+    <li>{{ choice.choice_text }} -- {{ choice.votes }} vote {{ choice.votes|pluralize }}</li> <!-- 접두사 생성 pluralize -->
+    {% endfor %}
+</ul>
+
+<a href="{% url 'polls:detail' question.id %}">Vote again?</a> <!-- url 태그를 이용하여 /polls/3/ 과 같은 형식으로 만든다(reverse) 와 비슷함
